@@ -116,4 +116,4 @@ Make sure backend is running before testing features like job creation and appli
 
 ### 🌐 Backend URL
 
-https://quckhire-frontend.dirasah.org
+https://github.com/RashedAbdullah/quick-hire-api
