@@ -36,9 +36,9 @@ const ApplyForm = () => {
   const handleSubmit = (ev: React.FormEvent) => {
     ev.preventDefault();
     if (validate()) {
-      toast.success("Application submitted!", {
-        description: `Thank you ${form.name}, your application for ${job.title} at ${job.company} has been received.`,
-      });
+      // toast.success("Application submitted!", {
+      //   description: `Thank you ${form.name}, your application for ${job.title} at ${job.company} has been received.`,
+      // });
       setForm({ name: "", email: "", resume: "", cover: "" });
       setErrors({});
     }
