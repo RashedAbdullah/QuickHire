@@ -51,6 +51,7 @@ src/services/
 ```
 
 - `app/` → Routing and pages
+- `app/dashboard` → Admin can add and delete jobs and can see application
 - `components/` → Reusable UI components
 - `lib/` → Utilities
 - `models/` → TypeScript interfaces

@@ -71,7 +71,7 @@ function Button({
     return (props.children = (
       <div className="flex items-center gap-2">
         <LoaderCircle className="animate-spin" />
-        {loadingText !== undefined ? loadingText : "লোডিং..."}
+        {loadingText !== undefined ? loadingText : "Loading..."}
       </div>
     ));
   }

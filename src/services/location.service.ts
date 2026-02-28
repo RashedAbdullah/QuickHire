@@ -1,11 +1,4 @@
-import { JobModel } from "@/models/job.model";
-import {
-  ApiResponse,
-  BaseService,
-  PaginatedResponse,
-  PaginationQuery,
-  ServiceResult,
-} from "./base.service";
+import { BaseService, PaginationQuery } from "./base.service";
 
 export interface JobPaginationQuery extends PaginationQuery {
   title?: string;

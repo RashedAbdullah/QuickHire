@@ -9,8 +9,6 @@ const JobDetail = async ({ params }: { params: Promise<{ slug: string }> }) => {
 
   const { data } = await jobService.findById(slug);
 
-
-
   const job = data?.data;
 
   if (!job) {
@@ -85,7 +83,7 @@ const JobDetail = async ({ params }: { params: Promise<{ slug: string }> }) => {
             </div>
           </div>
 
-          <ApplyForm />
+          <ApplyForm job={job} />
         </div>
       </div>
     </div>
