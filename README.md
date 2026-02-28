@@ -39,18 +39,22 @@ https://quckhire-frontend.dirasah.org
 ## 📁 Project Structure
 
 ```
-app/
-components/
-lib/
-types/
-utils/
+src/app/
+src/assets/
+src/components/
+src/config/
+src/context/
+src/hooks/
+src/lib/
+scr/models/
+src/services/
 ```
 
 - `app/` → Routing and pages
 - `components/` → Reusable UI components
-- `lib/` → API utilities
-- `types/` → TypeScript interfaces
-- `utils/` → Helper functions
+- `lib/` → Utilities
+- `models/` → TypeScript interfaces
+- `service/` → API Hanlders
 
 ---
 
@@ -77,7 +81,7 @@ utils/
    npm run dev
    ```
 
-   App will run at: http://localhost:3001
+   App will run at: http://localhost:3000
 
 ---
 
@@ -107,3 +111,9 @@ Make sure backend is running before testing features like job creation and appli
 - UI closely follows the provided Figma design.
 - Minor spacing adjustments made for responsiveness.
 - Code structured for clarity and maintainability.
+
+---
+
+### 🌐 Backend URL
+
+https://github.com/RashedAbdullah/quick-hire-api
