@@ -1,0 +1,28 @@
+import { JobModel } from "@/models/job.model";
+import {
+  ApiResponse,
+  BaseService,
+  PaginatedResponse,
+  PaginationQuery,
+  ServiceResult,
+} from "./base.service";
+
+export interface JobPaginationQuery extends PaginationQuery {
+  title?: string;
+  companyId?: string;
+  categoryId?: string;
+  locationId?: string;
+}
+
+class LocationService extends BaseService {
+  constructor() {
+    super("/locations");
+  }
+
+  // GET All Books
+  async findAll() {
+    return await this.get("");
+  }
+}
+
+export const locationService = new LocationService();
