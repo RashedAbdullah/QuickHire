@@ -11,6 +11,14 @@ https://quckhire-frontend.dirasah.org
 
 ---
 
+---
+
+## 🌐 Dashboard
+
+https://quckhire-frontend.dirasah.org/dashboard (No Auth Required)
+
+---
+
 ## 🛠 Tech Stack
 
 - Next.js (App Router)
