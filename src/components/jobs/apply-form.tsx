@@ -1,109 +1,153 @@
 "use client";
 
-import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { JobModel } from "@/models/job.model";
+import { applicationService } from "@/services/application.service";
 
-const ApplyForm = () => {
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    resume: "",
-    cover: "",
+const formSchema = z.object({
+  name: z.string().min(1, "Name is required"),
+  email: z.string().min(1, "Email is required").email("Invalid email format"),
+  resumeLink: z
+    .string()
+    .min(1, "Resume URL is required")
+    .url("Invalid URL format"),
+  coverNote: z.string().min(1, "Cover note is required"),
+});
+
+type FormValues = z.infer<typeof formSchema>;
+
+const ApplyForm = ({ job }: { job: JobModel }) => {
+  const form = useForm<FormValues>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      resumeLink: "",
+      coverNote: "",
+    },
   });
-  const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const validate = () => {
-    const e: Record<string, string> = {};
-    if (!form.name.trim()) e.name = "Name is required";
-    if (!form.email.trim()) e.email = "Email is required";
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email))
-      e.email = "Invalid email format";
-    if (!form.resume.trim()) e.resume = "Resume URL is required";
-    else {
-      try {
-        new URL(form.resume);
-      } catch {
-        e.resume = "Invalid URL format";
+  const onSubmit = async (data: FormValues) => {
+    try {
+      const { error } = await applicationService.create({
+        ...data,
+        jobId: job?.id,
+      });
+
+      if (error) {
+        toast.error("Application failed");
+      } else {
+        toast.success("Application submitted!", {
+          description: `Thank you ${data.name}, your application for ${job.title} at ${job.company} has been received.`,
+        });
+
+        form.reset();
       }
-    }
-    setErrors(e);
-    return Object.keys(e).length === 0;
-  };
+    } catch (error) {
+      console.error(error);
 
-  const handleSubmit = (ev: React.FormEvent) => {
-    ev.preventDefault();
-    if (validate()) {
-      // toast.success("Application submitted!", {
-      //   description: `Thank you ${form.name}, your application for ${job.title} at ${job.company} has been received.`,
-      // });
-      setForm({ name: "", email: "", resume: "", cover: "" });
-      setErrors({});
+      toast.error("Application Failed");
     }
   };
 
   return (
     <div>
-      <div className="sticky top-20 rounded border border-border bg-card p-6">
+      <div className="sticky top-20 border border-border bg-card p-6">
         <h2 className="mb-4 text-lg font-bold text-foreground">Apply Now</h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="mb-1 block text-sm font-medium text-foreground">
-              Name *
-            </label>
-            <Input
-              value={form.name}
-              onChange={(e) => setForm({ ...form, name: e.target.value })}
-              placeholder="Your full name"
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Name *</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Your full name" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-            {errors.name && (
-              <p className="mt-1 text-xs text-destructive">{errors.name}</p>
-            )}
-          </div>
-          <div>
-            <label className="mb-1 block text-sm font-medium text-foreground">
-              Email *
-            </label>
-            <Input
-              type="email"
-              value={form.email}
-              onChange={(e) => setForm({ ...form, email: e.target.value })}
-              placeholder="you@example.com"
+
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email *</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="email"
+                      placeholder="you@example.com"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-            {errors.email && (
-              <p className="mt-1 text-xs text-destructive">{errors.email}</p>
-            )}
-          </div>
-          <div>
-            <label className="mb-1 block text-sm font-medium text-foreground">
-              Resume URL *
-            </label>
-            <Input
-              value={form.resume}
-              onChange={(e) => setForm({ ...form, resume: e.target.value })}
-              placeholder="https://your-resume.com/resume.pdf"
+
+            <FormField
+              control={form.control}
+              name="resumeLink"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Resume URL *</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="https://your-resume.com/resume.pdf"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-            {errors.resume && (
-              <p className="mt-1 text-xs text-destructive">{errors.resume}</p>
-            )}
-          </div>
-          <div>
-            <label className="mb-1 block text-sm font-medium text-foreground">
-              Cover Note
-            </label>
-            <Textarea
-              value={form.cover}
-              onChange={(e) => setForm({ ...form, cover: e.target.value })}
-              placeholder="Why are you a great fit?"
-              rows={4}
+
+            <FormField
+              control={form.control}
+              name="coverNote"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Cover Note</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Why are you a great fit?"
+                      rows={4}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-          </div>
-          <Button type="submit" className="w-full">
-            Submit Application
-          </Button>
-        </form>
+
+            <Button
+              type="submit"
+              disabled={form.formState.isSubmitting}
+              className="w-full"
+            >
+              {form.formState.isSubmitting
+                ? "Submitting..."
+                : "Submit Application"}
+            </Button>
+          </form>
+        </Form>
       </div>
     </div>
   );

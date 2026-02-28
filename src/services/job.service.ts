@@ -49,6 +49,19 @@ class JobService extends BaseService {
   ): Promise<ServiceResult<ApiResponse<JobModel>>> {
     return await this.post("", data);
   }
+
+  // PUT Update a job by ID
+  async update(
+    id: string,
+    data: Partial<JobModel>,
+  ): Promise<ServiceResult<ApiResponse<JobModel>>> {
+    return await this.put(`/${id}`, data);
+  }
+
+  // Delete a job by ID
+  async remove(id: string): Promise<ServiceResult<ApiResponse<null>>> {
+    return await this.delete(`/${id}`);
+  }
 }
 
 export const jobService = new JobService();

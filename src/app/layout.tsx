@@ -2,8 +2,6 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/sonner";
-import Header from "@/components/layout/header";
-import Footer from "@/components/layout/footer";
 import { JobProvider } from "@/context/JobContext";
 import { clashDisplay, epilogue } from "@/lib/fonts";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
@@ -26,11 +24,7 @@ export default function RootLayout({
         <Toaster richColors />
         <NuqsAdapter>
           <TooltipProvider>
-            <JobProvider>
-              <Header />
-              {children}
-              <Footer />
-            </JobProvider>
+            <JobProvider>{children}</JobProvider>
           </TooltipProvider>
         </NuqsAdapter>
       </body>

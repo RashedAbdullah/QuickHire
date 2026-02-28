@@ -1,244 +1,62 @@
-"use client";
-import { useState } from "react";
-import { Trash2 } from "lucide-react";
-import { useJobs } from "@/context/JobContext";
-import { locations } from "@/data/jobs";
-import JobTag from "@/components/JobTag";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { toast } from "sonner";
-
-const categoryOptions = [
-  "Design",
-  "Sales",
-  "Marketing",
-  "Finance",
-  "Technology",
-  "Engineering",
-  "Business",
-  "Human Resource",
-];
+import Link from "next/link";
 
 const Admin = () => {
-  const { jobs, addJob, deleteJob } = useJobs();
-  const [form, setForm] = useState({
-    title: "",
-    company: "",
-    location: "San Francisco, USA",
-    category: "Design",
-    type: "Full Time",
-    description: "",
-    fullDescription: "",
-    tags: "",
-  });
-
-  const handleAdd = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!form.title.trim() || !form.company.trim()) {
-      toast.error("Missing fields", {
-        description: "Title and Company are required.",
-      });
-      return;
-    }
-    addJob({
-      ...form,
-      tags: form.tags
-        .split(",")
-        .map((t) => t.trim())
-        .filter(Boolean),
-    });
-    toast.success("Job added!");
-    setForm({
-      title: "",
-      company: "",
-      location: "San Francisco, USA",
-      category: "Design",
-      type: "Full Time",
-      description: "",
-      fullDescription: "",
-      tags: "",
-    });
-  };
+  const menuItems = [
+    { name: "Jobs", href: "/dashboard/jobs", count: "156" },
+    { name: "Categories", href: "/dashboard/categories", count: "12" },
+    { name: "Locations", href: "/dashboard/locations", count: "8" },
+    { name: "Applications", href: "/dashboard/applications", count: "1,432" },
+  ];
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container py-8 md:py-12">
-        <h1 className="mb-8 text-3xl font-extrabold text-foreground">
-          Admin Panel
-        </h1>
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <div className="bg-white border-b border-gray-200">
+        <div className="max-w-5xl mx-auto px-6 py-8">
+          <h1 className="text-3xl font-semibold text-gray-900">
+            Quick Hire Dashboard
+          </h1>
+          <p className="text-gray-500 mt-1">Manage your platform settings</p>
+        </div>
+      </div>
 
-        <div className="grid gap-8 lg:grid-cols-3">
-          {/* Add Job Form */}
-          <div className="lg:col-span-1">
-            <div className="rounded border border-border bg-card p-6">
-              <h2 className="mb-4 text-lg font-bold text-foreground">
-                Add New Job
-              </h2>
-              <form onSubmit={handleAdd} className="space-y-4">
-                <div>
-                  <label className="mb-1 block text-sm font-medium text-foreground">
-                    Title *
-                  </label>
-                  <Input
-                    value={form.title}
-                    onChange={(e) =>
-                      setForm({ ...form, title: e.target.value })
-                    }
-                    placeholder="Job title"
-                  />
-                </div>
-                <div>
-                  <label className="mb-1 block text-sm font-medium text-foreground">
-                    Company *
-                  </label>
-                  <Input
-                    value={form.company}
-                    onChange={(e) =>
-                      setForm({ ...form, company: e.target.value })
-                    }
-                    placeholder="Company name"
-                  />
-                </div>
-                <div>
-                  <label className="mb-1 block text-sm font-medium text-foreground">
-                    Location
-                  </label>
-                  <select
-                    value={form.location}
-                    onChange={(e) =>
-                      setForm({ ...form, location: e.target.value })
-                    }
-                    className="w-full rounded border border-input bg-background px-3 py-2 text-sm text-foreground"
-                  >
-                    {locations
-                      .filter((l) => l !== "All Locations")
-                      .map((l) => (
-                        <option key={l} value={l}>
-                          {l}
-                        </option>
-                      ))}
-                  </select>
-                </div>
-                <div>
-                  <label className="mb-1 block text-sm font-medium text-foreground">
-                    Category
-                  </label>
-                  <select
-                    value={form.category}
-                    onChange={(e) =>
-                      setForm({ ...form, category: e.target.value })
-                    }
-                    className="w-full rounded border border-input bg-background px-3 py-2 text-sm text-foreground"
-                  >
-                    {categoryOptions.map((c) => (
-                      <option key={c} value={c}>
-                        {c}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div>
-                  <label className="mb-1 block text-sm font-medium text-foreground">
-                    Type
-                  </label>
-                  <select
-                    value={form.type}
-                    onChange={(e) => setForm({ ...form, type: e.target.value })}
-                    className="w-full rounded border border-input bg-background px-3 py-2 text-sm text-foreground"
-                  >
-                    {["Full Time", "Part Time", "Contract", "Internship"].map(
-                      (t) => (
-                        <option key={t} value={t}>
-                          {t}
-                        </option>
-                      ),
-                    )}
-                  </select>
-                </div>
-                <div>
-                  <label className="mb-1 block text-sm font-medium text-foreground">
-                    Short Description
-                  </label>
-                  <Textarea
-                    value={form.description}
-                    onChange={(e) =>
-                      setForm({ ...form, description: e.target.value })
-                    }
-                    placeholder="Brief description"
-                    rows={2}
-                  />
-                </div>
-                <div>
-                  <label className="mb-1 block text-sm font-medium text-foreground">
-                    Full Description
-                  </label>
-                  <Textarea
-                    value={form.fullDescription}
-                    onChange={(e) =>
-                      setForm({ ...form, fullDescription: e.target.value })
-                    }
-                    placeholder="Detailed description"
-                    rows={4}
-                  />
-                </div>
-                <div>
-                  <label className="mb-1 block text-sm font-medium text-foreground">
-                    Tags (comma separated)
-                  </label>
-                  <Input
-                    value={form.tags}
-                    onChange={(e) => setForm({ ...form, tags: e.target.value })}
-                    placeholder="Design, Marketing"
-                  />
-                </div>
-                <Button type="submit" className="w-full">
-                  Add Job
-                </Button>
-              </form>
-            </div>
-          </div>
+      {/* Menu Grid */}
+      <div className="max-w-5xl mx-auto px-6 py-12">
+        <div className="grid grid-cols-2 gap-4">
+          {menuItems.map((item) => (
+            <Link
+              key={item.name}
+              href={item.href}
+              className="block bg-white p-6 rounded-xl border border-gray-200 hover:border-gray-300 hover:shadow-sm transition-all"
+            >
+              <div className="flex items-center justify-between mb-2">
+                <h2 className="text-lg font-medium text-gray-900">
+                  {item.name}
+                </h2>
+                <span className="text-sm text-gray-500">{item.count}</span>
+              </div>
+              <p className="text-sm text-gray-500">
+                Manage {item.name.toLowerCase()}
+              </p>
+            </Link>
+          ))}
+        </div>
 
-          {/* Job List */}
-          <div className="lg:col-span-2">
-            <h2 className="mb-4 text-lg font-bold text-foreground">
-              All Jobs ({jobs.length})
-            </h2>
-            <div className="space-y-3">
-              {jobs.map((job: any) => (
-                <div
-                  key={job.id}
-                  className="flex items-center gap-4 rounded border border-border bg-card p-4"
-                >
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded bg-muted text-xs font-bold text-foreground">
-                    {job.company.slice(0, 2)}
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <h3 className="text-sm font-semibold text-foreground">
-                      {job.title}
-                    </h3>
-                    <p className="text-xs text-muted-foreground">
-                      {job.company} · {job.location}
-                    </p>
-                    <div className="mt-1 flex flex-wrap gap-1">
-                      <JobTag label={job.type} />
-                      <JobTag label={job.category} />
-                    </div>
-                  </div>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => {
-                      deleteJob(job.id);
-                      toast.success("Job deleted");
-                    }}
-                    className="text-destructive hover:bg-destructive/10"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </div>
-              ))}
-            </div>
+        {/* Quick Actions */}
+        <div className="mt-8 bg-white rounded-xl border border-gray-200 p-6">
+          <h3 className="text-sm font-medium text-gray-700 mb-3">
+            Quick Actions
+          </h3>
+          <div className="space-y-2">
+            <button className="w-full text-left px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">
+              + Add New Job
+            </button>
+            <button className="w-full text-left px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">
+              + Add New Category
+            </button>
+            <button className="w-full text-left px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">
+              + Add New Location
+            </button>
           </div>
         </div>
       </div>

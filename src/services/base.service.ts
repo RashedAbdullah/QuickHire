@@ -104,7 +104,6 @@ export abstract class BaseService {
       const url = `${this.baseUrl}${endpoint}`;
       const cleanedParams = this.cleanParams(params ?? {});
 
-
       const response = await http.get(url, { params: cleanedParams });
       return { data: response.data };
     } catch (error: any) {
