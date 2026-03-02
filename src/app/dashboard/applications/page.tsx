@@ -64,7 +64,7 @@ const Page = () => {
               {loading ? (
                 <TableRow>
                   <TableCell colSpan={7} className="text-center h-64">
-                    <div>Loading Jobs</div>
+                    <div>Loading Applications...</div>
                   </TableCell>
                 </TableRow>
               ) : applications.length === 0 ? (
