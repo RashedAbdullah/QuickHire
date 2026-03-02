@@ -72,21 +72,21 @@ export const ConfirmDialogProvider = ({
             <AlertDialogContent>
               <AlertDialogHeader>
                 <AlertDialogTitle>
-                  {options.title || "আপনি কি শিউর?"}
+                  {options.title || "Are you sure?"}
                 </AlertDialogTitle>
                 {options.description && (
                   <div className="text-muted-foreground mt-2">
                     {options.description ||
-                      "আপনি কি শিউর যে, আপনি উক্ত বিষয়টি ডিলিট করতে চান?"}
+                      "Are you sure you want to delete this item?"}
                   </div>
                 )}
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <Button variant="outline" onClick={() => cancel(false)}>
-                  {options.cancelText || "বাতিল"}
+                  {options.cancelText || "Cancel"}
                 </Button>
                 <Button variant="destructive" onClick={() => cancel(true)}>
-                  {options.confirmText || "ডিলিট"}
+                  {options.confirmText || "Confirm"}
                 </Button>
               </AlertDialogFooter>
             </AlertDialogContent>
