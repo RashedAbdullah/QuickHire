@@ -130,7 +130,7 @@ const JobsPage = () => {
               {loading ? (
                 <TableRow>
                   <TableCell colSpan={7} className="text-center h-64">
-                    <div>Loading Jobs</div>
+                    <div>Loading Jobs...</div>
                   </TableCell>
                 </TableRow>
               ) : jobs.length === 0 ? (
@@ -154,7 +154,7 @@ const JobsPage = () => {
                       {job.location?.city}, {job.location?.country}
                     </TableCell>
                     <TableCell className="text-end">
-                      <Button
+                      {/* <Button
                         onClick={() => {
                           setSelectedJob(job);
                           setOpenModal((prev) => ({
@@ -167,17 +167,11 @@ const JobsPage = () => {
                         variant="ghost"
                       >
                         <Eye className="h-4 w-4" />
-                      </Button>
+                      </Button> */}
 
                       <Button
                         title="এডিট"
-                        onClick={() => {
-                          setSelectedJob(job);
-                          setOpenModal((prev) => ({
-                            ...prev,
-                            isEditUpdate: true,
-                          }));
-                        }}
+                        onClick={() => handleUpdateJob(job)}
                         size="icon"
                         variant="ghost"
                       >
