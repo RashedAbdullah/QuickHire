@@ -16,6 +16,18 @@ class CategoryService extends BaseService {
   async findAll() {
     return await this.get("");
   }
+
+  async create(data: any) {
+    return await this.post("", data);
+  }
+
+  async update(id: string, data: any) {
+    return await this.put(`/${id}`, data);
+  }
+
+  async remove(id: string) {
+    return await this.delete(`/${id}`);
+  }
 }
 
 export const categoryService = new CategoryService();

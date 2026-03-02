@@ -1,7 +1,6 @@
 "use client";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { CompanyModel } from "@/models/company.model";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -25,18 +24,16 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { companyService } from "@/services/company.service";
+import { CategoryModel } from "@/models/category.model";
+import { categoryService } from "@/services/category.service";
 
-const companySchema = z.object({
-  name: z.string().min(3, "Job title should be at least 3 characters"),
-  industry: z.string().min(1, "Job description is required"),
-  website: z.string().min(1, "Job description is required"),
-  logo: z.string().min(1, "Job description is required"),
+const categorySchema = z.object({
+  name: z.string().min(3, "Category name should be at least 3 characters"),
 });
 
-type CompanySchema = z.infer<typeof companySchema>;
+type CategorySchema = z.infer<typeof categorySchema>;
 
-const AddEditCompanyModal = ({
+const AddEditCategoryModal = ({
   open,
   onClose,
   defaultValues,
@@ -44,16 +41,13 @@ const AddEditCompanyModal = ({
 }: {
   open: boolean;
   onClose: () => void;
-  defaultValues?: CompanyModel | null;
+  defaultValues?: CategoryModel | null;
   onSuccess?: () => void;
 }) => {
-  const form = useForm<CompanySchema>({
-    resolver: zodResolver(companySchema),
+  const form = useForm<CategorySchema>({
+    resolver: zodResolver(categorySchema),
     defaultValues: {
       name: "",
-      industry: "",
-      website: "",
-      logo: "",
     },
   });
 
@@ -61,47 +55,41 @@ const AddEditCompanyModal = ({
     if (open && defaultValues?.id) {
       form.reset({
         name: defaultValues?.name ?? "",
-        industry: defaultValues?.industry ?? "",
-        website: defaultValues?.website ?? "",
-        logo: defaultValues?.logo ?? "",
       });
     } else if (open && !defaultValues?.id) {
       form.reset({
         name: "",
-        industry: "",
-        website: "",
-        logo: "",
       });
     }
   }, [open]);
 
-  const onSubmit = async (data: CompanySchema) => {
+  const onSubmit = async (data: CategorySchema) => {
     try {
       if (defaultValues?.id) {
-        const { error } = await companyService.update(defaultValues.id, {
+        const { error } = await categoryService.update(defaultValues.id, {
           ...data,
         });
         if (error) {
-          toast.error("Failed to update company");
+          toast.error("Failed to update category");
           return;
         }
-        toast.success("Company updated successfully");
+        toast.success("Category updated successfully");
       } else {
-        const { error } = await companyService.create({
+        const { error } = await categoryService.create({
           ...data,
         });
         if (error) {
-          toast.error("Failed to add company");
+          toast.error("Failed to add category");
           return;
         }
-        toast.success("Company created successfully");
+        toast.success("Category created successfully");
       }
 
       onClose();
       onSuccess?.();
     } catch (error) {
       console.error(error);
-      toast.error("Failed to add/update job");
+      toast.error("Failed to add/update category");
     }
   };
 
@@ -110,12 +98,12 @@ const AddEditCompanyModal = ({
       <DialogContent className="max-w-[1000px]! w-full max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>
-            {defaultValues?.id ? "Update Job" : "Add New Job"}
+            {defaultValues?.id ? "Update Category" : "Add New Category"}
           </DialogTitle>
           <DialogDescription>
             {defaultValues?.id
-              ? "Update existing job details"
-              : "Add a new job listing"}
+              ? "Update existing category details"
+              : "Add a new category"}
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -129,48 +117,6 @@ const AddEditCompanyModal = ({
                     <FormLabel>Name</FormLabel>
                     <FormControl>
                       <Input placeholder="Name" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="industry"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Industry</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Industry" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="website"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Website</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Website" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="logo"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Logo URL</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Logo URL" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -203,4 +149,4 @@ const AddEditCompanyModal = ({
   );
 };
 
-export default AddEditCompanyModal;
+export default AddEditCategoryModal;
